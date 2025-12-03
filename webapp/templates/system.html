@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% block content %}
+<h2>System Status</h2>
+<ul class="list-group mb-4">
+  <li class="list-group-item"><strong>Uptime:</strong> {{ uptime }}</li>
+  <li class="list-group-item">
+    <strong>Last Detection:</strong> {{ last_detection }}
+  </li>
+  <li class="list-group-item">
+    <strong>Total Detections:</strong> {{ total_detections }}
+  </li>
+  <li class="list-group-item">
+    <strong>Most Frequent Anomaly:</strong> {{ most_anomaly }}
+  </li>
+</ul>
+{% endblock %}

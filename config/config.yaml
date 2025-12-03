@@ -1,0 +1,93 @@
+# Enhanced Video Anomaly Detection Configuration
+
+# Model Configuration
+model:
+  visual_dim: 1000
+  audio_dim: 40
+  hidden_dim: 256
+  num_classes: 13 # Will be dynamically set based on data
+  dropout_rate: 0.3
+  learning_rate: 0.001
+  batch_size: 16
+  num_epochs: 50
+
+# Feature Extraction Configuration
+feature_extraction:
+  frame_stride: 5
+  max_frames_per_video: 20000
+  batch_size_frames: 4
+  max_videos: null # Process all videos
+  use_gpu: true
+  device: "auto" # auto, cpu, mps, cuda
+
+# Data Configuration
+data:
+  csv_path: "processed_data.csv"
+  features_path: "features.npz"
+  model_weights_path: "model_weights.pth"
+  label_map_path: "label_map.json"
+  temp_dir: "feature_temp"
+  backup_interval: 50 # Save backup every N videos
+
+# Training Configuration
+training:
+  test_size: 0.2
+  random_state: 42
+  validation_interval: 5 # Evaluate every N epochs
+  early_stopping_patience: 10
+  save_best_model: true
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "anomaly_detection.log"
+  max_bytes: 10485760 # 10MB
+  backup_count: 5
+
+# Distributed Processing Configuration
+distributed_processing:
+  # Worker Pool Configuration
+  worker_pool:
+    num_gpu_workers: 2
+    num_cpu_workers: 4
+    stage_timeout: 10.0
+
+  # Batch Processing Configuration
+  batch_processor:
+    min_batch_size: 1
+    max_batch_size: 32
+    target_batch_size: 8
+    max_wait_time: 1.0
+    memory_threshold: 0.8
+    gpu_memory_threshold: 0.8
+    auto_adjust_batch_size: true
+    priority_boost_factor: 1.5
+
+  # Pipeline Configuration
+  pipeline:
+    stage_timeout: 5.0
+    max_queue_size: 1000
+    enable_metrics: true
+
+  # Graceful Degradation Configuration
+  degradation:
+    latency_threshold: 5.0
+    memory_threshold: 0.9
+    queue_size_threshold: 100
+
+# Anomaly Categories
+anomaly_categories:
+  - "abuse"
+  - "arrest"
+  - "arson"
+  - "assault"
+  - "burglary"
+  - "explosion"
+  - "fighting"
+  - "robbery"
+  - "shooting"
+  - "shoplifting"
+  - "stealing"
+  - "vandalism"
+  - "normal"

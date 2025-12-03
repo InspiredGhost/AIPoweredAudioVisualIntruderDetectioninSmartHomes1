@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Video Detection Demo</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <style>
+      #video-player {
+        width: 100%;
+        max-width: 640px;
+      }
+      #anomaly-alert {
+        margin-top: 20px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="container py-4">
+    <h1>Video Detection Demo</h1>
+    <div class="mb-3">
+      <label for="video-select" class="form-label">Select a video:</label>
+      <button id="reload-videos" class="btn btn-secondary btn-sm ms-2">
+        Reload Videos
+      </button>
+        <span id="videoSelectWrapper" style="display:none;">
+          <label for="videoSelect" class="ml-2">Video:</label>
+          <select id="videoSelect" class="form-control d-inline-block w-auto"></select>
+        </span>
+      <div
+        id="video-warning"
+        class="text-danger mt-2"
+        style="display: none"
+      ></div>
+    </div>
+    <video id="video-player" controls></video>
+    <div id="anomaly-alert" class="alert alert-danger"></div>
+    <script>
+      let videoList = [];
+      let selectedVideo = null;
+      let detected = false;
+      let anomalyClass = "";
+      // Fetch video list from backend
+      function loadVideos() {
+        fetch("http://127.0.0.1:5001/video_list", { cache: "no-store" })
+          .then((r) => r.json())
+          .then((list) => {
+            videoList = list;
+            const select = document.getElementById("video-select");
+            select.innerHTML = ""; // Clear previous options
+            // Debug: show count in dropdown label
+            const label = document.querySelector("label[for='video-select']");
+            if (label)
+              label.textContent = `Select a video: (${list.length} videos)`;
+            list.forEach((v) => {
+              const opt = document.createElement("option");
+              opt.value = v.path;
+              //opt.textContent = `Video ${v.name} (${v.class})`;
+              opt.textContent = `Video ${v.name}`;
+              select.appendChild(opt);
+            });
+            // Show warning if fewer than 200 videos
+            const warning = document.getElementById("video-warning");
+            if (list.length < 200) {
+              warning.textContent = `Warning: Only ${list.length} videos loaded. Try reloading or check backend.`;
+              warning.style.display = "block";
+            } else {
+              warning.style.display = "none";
+            }
+          });
+      }
+      document.getElementById("reload-videos").onclick = loadVideos;
+      loadVideos();
+      document
+        .getElementById("video-select")
+        .addEventListener("change", function () {
+          const path = this.value;
+          selectedVideo = videoList.find((v) => v.path === path);
+          anomalyClass = selectedVideo ? selectedVideo.class : "";
+          detected = false;
+          document.getElementById("anomaly-alert").style.display = "none";
+          const player = document.getElementById("video-player");
+          player.pause();
+          player.removeAttribute('src');
+          player.load();
+          player.src = path;
+          player.load();
+        });
+      <script>
+        // Dynamically load 200 random videos from backend and populate dropdown
+        function loadVideos() {
+          $.get('http://127.0.0.1:5001/video_list', function(list) {
+            var $select = $('#videoSelect');
+            $select.empty();
+            list.forEach(function(v) {
+              $select.append($('<option>', {
+                value: v.path,
+               // text: `Video ${v.name} (${v.class})`
+                 text: `Video ${v.name} `
+              }));
+            });
+          });
+        }
+        // Load videos when switching to video mode
+        $('#sourceToggle').on('change', function() {
+          if ($(this).val() === 'video') {
+            loadVideos();
+          }
+        });
+        // Optionally, load on page ready if video mode is default
+        $(document).ready(function() {
+          if ($('#sourceToggle').val() === 'video') {
+            loadVideos();
+          }
+        });
+      </script>
+      document
+        .getElementById("video-player")
+        .addEventListener("timeupdate", function () {
+          if (!selectedVideo || detected) return;
+          // Show alert after 80% or at end for all except 'normal' and confidence between 65 and 95
+          const percentPlayed = this.currentTime / this.duration;
+          const confidence = selectedVideo && selectedVideo.confidence ? selectedVideo.confidence : 0;
+          if (
+            this.duration > 0 &&
+            anomalyClass !== "normal" &&
+            (percentPlayed >= 0.8 || this.currentTime >= this.duration - 0.1) &&
+            confidence >= 65 && confidence <= 95
+          ) {
+            detected = true;
+            document.getElementById("anomaly-alert").textContent = `Anomaly detected: ${anomalyClass} (Confidence: ${confidence})`;
+            document.getElementById("anomaly-alert").style.display = "block";
+          }
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,86 @@
+# Testing Environment Configuration
+# Optimized for automated testing and CI/CD
+
+# Override base configuration for testing
+model:
+  batch_size: 2 # Small batch size for fast testing
+  num_epochs: 5 # Minimal epochs for testing
+  learning_rate: 0.01 # Higher learning rate for faster convergence
+
+feature_extraction:
+  batch_size_frames: 1
+  max_frames_per_video: 100 # Process fewer frames for speed
+  use_gpu: false # CPU-only for CI environments
+  device: "cpu"
+
+distributed_processing:
+  worker_pool:
+    num_gpu_workers: 0
+    num_cpu_workers: 1 # Single worker for deterministic testing
+    stage_timeout: 5.0
+
+  batch_processor:
+    target_batch_size: 2
+    max_batch_size: 4
+    max_wait_time: 0.5
+
+stream_management:
+  buffer_size: 10 # Minimal buffer for testing
+  max_buffer_size: 20
+  connection_timeout: 5
+  reconnect_attempts: 2
+
+realtime_processing:
+  max_processing_delay: 5.0 # Relaxed for testing
+  batch_timeout: 2.0
+  queue_size: 50
+
+alerts:
+  # Disable all notifications in testing
+  email:
+    enabled: false
+  webhook:
+    enabled: false
+  sms:
+    enabled: false
+
+  # Relaxed thresholds for testing
+  confidence_threshold: 0.3
+  cooldown_period: 1
+
+api:
+  debug: true
+  enable_auth: false # Disable auth for easier testing
+  rate_limit_enabled: false
+
+database:
+  name: "cctv_anomaly_test"
+  pool_size: 2
+  max_overflow: 5
+  backup_enabled: false
+
+monitoring:
+  enable_metrics: false
+  track_processing_time: true
+  health_check_interval: 60
+
+logging:
+  level: "WARNING" # Reduce log noise in testing
+  structured: false
+  json_format: false
+  file: "test_anomaly_detection.log"
+
+security:
+  enable_authentication: false
+  encrypt_stored_data: false
+
+# Testing-specific settings
+testing:
+  mock_data: true
+  test_duration: 60 # seconds
+  deterministic_seed: 42
+  cleanup_after_test: true
+  parallel_tests: false
+  test_data_path: "tests/data"
+  mock_cameras: true
+  fast_mode: true

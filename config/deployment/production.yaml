@@ -1,0 +1,101 @@
+# Production Environment Configuration
+# Optimized for high-performance production deployment
+
+# Override base configuration for production
+model:
+  batch_size: 32 # Larger batch size for better GPU utilization
+  auto_update: true
+  update_threshold: 0.02
+
+feature_extraction:
+  batch_size_frames: 8
+  use_gpu: true
+  device: "cuda"
+  sequence_length: 32 # Longer sequences for better accuracy
+
+distributed_processing:
+  worker_pool:
+    num_gpu_workers: 4 # Multiple GPU workers
+    num_cpu_workers: 8 # More CPU workers for preprocessing
+    health_check_interval: 15
+
+  batch_processor:
+    target_batch_size: 16
+    max_batch_size: 64
+    auto_adjust_batch_size: true
+
+  degradation:
+    enable_auto_scaling: true
+
+stream_management:
+  buffer_size: 200 # Larger buffer for production
+  max_buffer_size: 1000
+  connection_timeout: 60
+  reconnect_attempts: 10
+
+realtime_processing:
+  max_processing_delay: 1.0 # Stricter latency requirements
+  queue_size: 2000
+
+alerts:
+  # Enable all notification channels
+  email:
+    enabled: true
+  webhook:
+    enabled: true
+  sms:
+    enabled: true
+
+  # Production alert settings
+  confidence_threshold: 0.8
+  cooldown_period: 60
+  max_alerts_per_minute: 5
+
+api:
+  debug: false
+  enable_auth: true
+  rate_limit_enabled: true
+  rate_limit_per_minute: 1000
+
+database:
+  pool_size: 20
+  max_overflow: 50
+  backup_enabled: true
+  backup_interval_hours: 6
+
+redis:
+  health_check_interval: 15
+
+monitoring:
+  enable_metrics: true
+  track_processing_time: true
+  track_memory_usage: true
+  track_gpu_usage: true
+  track_queue_sizes: true
+
+  # Production alerting thresholds
+  cpu_threshold: 75
+  memory_threshold: 80
+  gpu_memory_threshold: 85
+  disk_threshold: 85
+
+logging:
+  level: "INFO"
+  structured: true
+  json_format: true
+  rotate_daily: true
+  compress_old_logs: true
+
+security:
+  enable_authentication: true
+  encrypt_stored_data: true
+  enable_https: true
+  session_timeout: 1800 # 30 minutes
+
+# Production-specific settings
+production:
+  high_availability: true
+  load_balancing: true
+  auto_scaling: true
+  backup_strategy: "continuous"
+  disaster_recovery: true

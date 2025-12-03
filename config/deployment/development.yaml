@@ -1,0 +1,68 @@
+# Development Environment Configuration
+# Optimized for local development and testing
+
+# Override base configuration for development
+model:
+  batch_size: 4 # Smaller batch size for limited resources
+  num_epochs: 10 # Fewer epochs for faster testing
+
+feature_extraction:
+  batch_size_frames: 2
+  use_gpu: false # CPU-only for development machines without GPU
+  device: "cpu"
+
+distributed_processing:
+  worker_pool:
+    num_gpu_workers: 0 # No GPU workers in development
+    num_cpu_workers: 2 # Minimal CPU workers
+
+  batch_processor:
+    target_batch_size: 4
+    max_batch_size: 8
+
+stream_management:
+  buffer_size: 50 # Smaller buffer for development
+  max_buffer_size: 100
+
+alerts:
+  # Disable all notifications in development
+  email:
+    enabled: false
+  webhook:
+    enabled: false
+  sms:
+    enabled: false
+
+  # Lower thresholds for easier testing
+  confidence_threshold: 0.5
+  cooldown_period: 10
+
+api:
+  debug: true
+  enable_auth: false # Disable auth for easier development
+
+database:
+  pool_size: 5
+  max_overflow: 10
+
+monitoring:
+  enable_metrics: false # Disable metrics collection
+  track_processing_time: true
+  track_memory_usage: false
+  track_gpu_usage: false
+
+logging:
+  level: "DEBUG"
+  structured: false
+  json_format: false
+
+security:
+  enable_authentication: false
+  encrypt_stored_data: false
+
+# Development-specific settings
+development:
+  hot_reload: true
+  mock_cameras: true
+  test_data_path: "data/test_videos"
+  enable_debug_endpoints: true

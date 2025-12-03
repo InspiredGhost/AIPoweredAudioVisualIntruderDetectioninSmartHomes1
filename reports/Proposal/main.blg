@@ -1,0 +1,90 @@
+This is BibTeX, Version 0.99d (TeX Live 2025/Homebrew)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: IEEEtran.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: references.bib
+-- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+Warning--empty journal in eutizi_benedetto_2021
+Warning--empty journal in harini_et_al_2024
+Warning--empty journal in abdullah_noah_
+Warning--empty journal in malar_dineshkumar_2024
+Warning--empty journal in tomar_et_al_2022
+Warning--empty journal in ramli_et_al_
+Warning--empty journal in guo_2010
+Warning--empty journal in sivakumar_2018
+Warning--empty journal in nishanthini_et_al_2014
+Warning--empty journal in jin_et_al_
+Warning--empty journal in zaidi_jagadeesh_2017
+Warning--empty journal in archana_et_al_2022
+Warning--empty journal in lai_burred
+Warning--empty journal in hussain_kumar_ahamed_abishek_2024
+Warning--empty journal in gerald_et_al_2023
+Warning--empty journal in bruno_lavi_2020
+Warning--empty journal in ofli_et_al_
+Warning--empty journal in chopra_et_al_2023
+Warning--empty journal in baker_li_
+Warning--empty journal in lu_jiang
+Warning--empty journal in stephens_bors_
+Warning--empty journal in maiti_et_al_2024
+Warning--empty journal in balaji_et_al_2022
+Warning--empty journal in r_et_al_2024
+Warning--empty journal in ahmed_et_al_2020
+Warning--empty journal in surana_vaidya_2023
+Warning--empty journal in shahzad_2024
+Warning--empty journal in chang_et_al_2022
+Warning--empty journal in tanwar_et_al
+Warning--empty journal in nobakht_sivaraman_2016
+Warning--empty journal in sedjelmaci_senouci_
+Warning--empty journal in wathsala_et_al_2023
+Warning--empty journal in nagamani_et_al_2022
+
+Done.
+You've used 49 entries,
+            4087 wiz_defined-function locations,
+            1114 strings with 21810 characters,
+and the built_in function-call counts, 36534 in all, are:
+= -- 2965
+> -- 1020
+< -- 275
++ -- 561
+- -- 200
+* -- 1906
+:= -- 5766
+add.period$ -- 98
+call.type$ -- 49
+change.case$ -- 49
+chr.to.int$ -- 660
+cite$ -- 82
+duplicate$ -- 2524
+empty$ -- 2587
+format.name$ -- 236
+if$ -- 8312
+int.to.chr$ -- 0
+int.to.str$ -- 49
+missing$ -- 439
+newline$ -- 268
+num.names$ -- 49
+pop$ -- 1100
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 2
+skip$ -- 2728
+stack$ -- 0
+substring$ -- 1632
+swap$ -- 2039
+text.length$ -- 55
+text.prefix$ -- 0
+top$ -- 5
+type$ -- 49
+warning$ -- 33
+while$ -- 161
+width$ -- 51
+write$ -- 583
+(There were 33 warnings)

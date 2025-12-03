@@ -1,0 +1,501 @@
+# Enhanced Video Anomaly Detection Configuration Template
+# Copy this file to config.yaml and customize for your deployment
+
+# Model Configuration
+model:
+  visual_dim: 1000
+  audio_dim: 40
+  hidden_dim: 256
+  num_classes: 13 # Will be dynamically set based on data
+  dropout_rate: 0.3
+  learning_rate: 0.001
+  batch_size: 16
+  num_epochs: 50
+  
+  # Model paths
+  weights_path: "model_weights.pth"
+  backup_path: "model_weights_backup.pth"
+  
+  # Model update settings
+  auto_update: false
+  update_threshold: 0.05  # Minimum improvement to update model
+
+# Feature Extraction Configuration
+feature_extraction:
+  frame_stride: 5
+  max_frames_per_video: 20000
+  batch_size_frames: 4
+  max_videos: null # Process all videos
+  use_gpu: true
+  device: "auto" # auto, cpu, mps, cuda
+  
+  # Temporal processing
+  sequence_length: 16
+  overlap_ratio: 0.5
+  
+  # Audio processing
+  sample_rate: 22050
+  n_mfcc: 40
+  hop_length: 512
+  n_fft: 2048
+
+# Data Configuration
+data:
+  csv_path: "processed_data.csv"
+  features_path: "features.npz"
+  model_weights_path: "model_weights.pth"
+  label_map_path: "label_map.json"
+  temp_dir: "feature_temp"
+  backup_interval: 50 # Save backup every N videos
+  
+  # Storage settings
+  storage_path: "/app/storage"
+  max_storage_gb: 100
+  cleanup_policy: "oldest_first"
+  retention_days: 30
+
+# Training Configuration
+training:
+  test_size: 0.2
+  random_state: 42
+  validation_interval: 5 # Evaluate every N epochs
+  early_stopping_patience: 10
+  save_best_model: true
+  
+  # Advanced training settings
+  use_class_weights: true
+  augmentation_enabled: true
+  cross_validation_folds: 5
+
+# Stream Management Configuration
+stream_management:
+  # Connection settings
+  connection_timeout: 30
+  read_timeout: 10
+  reconnect_attempts: 5
+  reconnect_delay: 5
+  
+  # Buffer settings
+  buffer_size: 100
+  max_buffer_size: 500
+  buffer_cleanup_threshold: 0.8
+  
+  # Quality settings
+  min_fps: 5
+  target_fps: 15
+  max_fps: 30
+  quality_check_interval: 60
+
+# Real-time Processing Configuration
+realtime_processing:
+  # Processing settings
+  max_processing_delay: 2.0
+  batch_timeout: 1.0
+  queue_size: 1000
+  
+  # Performance settings
+  enable_frame_skipping: true
+  adaptive_quality: true
+  load_balancing: true
+
+# Alert System Configuration
+alerts:
+  # Notification channels
+  email:
+    enabled: false
+    smtp_server: "smtp.gmail.com"
+    smtp_port: 587
+    username: ""
+    password: ""
+    from_address: ""
+    to_addresses: []
+  
+  webhook:
+    enabled: false
+    urls: []
+    timeout: 10
+    retry_attempts: 3
+  
+  sms:
+    enabled: false
+    provider: "twilio"  # twilio, aws_sns
+    api_key: ""
+    api_secret: ""
+    from_number: ""
+    to_numbers: []
+  
+  # Alert settings
+  confidence_threshold: 0.7
+  cooldown_period: 30
+  max_alerts_per_minute: 10
+  
+  # Per-anomaly thresholds
+  anomaly_thresholds:
+    abuse: 0.8
+    assault: 0.9
+    fighting: 0.8
+    robbery: 0.9
+    shooting: 0.95
+    explosion: 0.95
+    arson: 0.85
+    vandalism: 0.7
+    burglary: 0.8
+    stealing: 0.75
+    shoplifting: 0.7
+    arrest: 0.8
+    normal: 0.3
+
+# Distributed Processing Configuration
+distributed_processing:
+  # Worker Pool Configuration
+  worker_pool:
+    num_gpu_workers: 2
+    num_cpu_workers: 4
+    stage_timeout: 10.0
+    worker_restart_threshold: 5
+    health_check_interval: 30
+  
+  # Batch Processing Configuration
+  batch_processor:
+    min_batch_size: 1
+    max_batch_size: 32
+    target_batch_size: 8
+    max_wait_time: 1.0
+    memory_threshold: 0.8
+    gpu_memory_threshold: 0.8
+    auto_adjust_batch_size: true
+    priority_boost_factor: 1.5
+  
+  # Pipeline Configuration
+  pipeline:
+    stage_timeout: 5.0
+    max_queue_size: 1000
+    enable_metrics: true
+    metrics_interval: 10
+  
+  # Graceful Degradation Configuration
+  degradation:
+    latency_threshold: 5.0
+    memory_threshold: 0.9
+    queue_size_threshold: 100
+    enable_auto_scaling: true
+
+# API Configuration
+api:
+  host: "0.0.0.0"
+  port: 5000
+  debug: false
+  
+  # Security settings
+  enable_auth: true
+  jwt_secret_key: "your-secret-key-here"
+  jwt_expiration_hours: 24
+  
+  # Rate limiting
+  rate_limit_enabled: true
+  rate_limit_per_minute: 100
+  
+  # CORS settings
+  cors_origins: ["*"]
+  cors_methods: ["GET", "POST", "PUT", "DELETE"]
+
+# Database Configuration
+database:
+  # PostgreSQL settings
+  host: "postgres"
+  port: 5432
+  name: "cctv_anomaly"
+  username: "cctv_user"
+  password: "cctv_password"
+  
+  # Connection pool settings
+  pool_size: 10
+  max_overflow: 20
+  pool_timeout: 30
+  pool_recycle: 3600
+  
+  # Backup settings
+  backup_enabled: true
+  backup_interval_hours: 24
+  backup_retention_days: 7
+
+# Redis Configuration
+redis:
+  host: "redis"
+  port: 6379
+  db: 0
+  password: ""
+  
+  # Connection settings
+  socket_timeout: 5
+  socket_connect_timeout: 5
+  retry_on_timeout: true
+  health_check_interval: 30
+
+# Monitoring Configuration
+monitoring:
+  # Metrics collection
+  enable_metrics: true
+  metrics_port: 8000
+  metrics_path: "/metrics"
+  
+  # Performance monitoring
+  track_processing_time: true
+  track_memory_usage: true
+  track_gpu_usage: true
+  track_queue_sizes: true
+  
+  # Health checks
+  health_check_interval: 30
+  health_check_timeout: 10
+  
+  # Alerting thresholds
+  cpu_threshold: 80
+  memory_threshold: 85
+  gpu_memory_threshold: 90
+  disk_threshold: 90
+  queue_size_threshold: 500
+
+# Logging Configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "anomaly_detection.log"
+  max_bytes: 10485760 # 10MB
+  backup_count: 5
+  
+  # Structured logging
+  structured: true
+  json_format: false
+  
+  # Log rotation
+  rotate_daily: true
+  compress_old_logs: true
+  
+  # Component-specific logging
+  components:
+    api: "INFO"
+    worker: "INFO"
+    stream_manager: "INFO"
+    alerts: "INFO"
+    storage: "INFO"
+
+# Security Configuration
+security:
+  # Authentication
+  enable_authentication: true
+  session_timeout: 3600
+  max_login_attempts: 5
+  lockout_duration: 300
+  
+  # Encryption
+  encrypt_stored_data: true
+  encryption_key: "your-encryption-key-here"
+  
+  # Network security
+  allowed_ips: []  # Empty list allows all IPs
+  blocked_ips: []
+  
+  # API security
+  enable_https: false
+  ssl_cert_path: ""
+  ssl_key_path: ""
+
+# Anomaly Categories
+anomaly_categories:
+  - "abuse"
+  - "arrest"
+  - "arson"
+  - "assault"
+  - "burglary"
+  - "explosion"
+  - "fighting"
+  - "robbery"
+  - "shooting"
+  - "shoplifting"
+  - "stealing"
+  - "vandalism"
+  - "normal"
+
+# Horizontal Scaling Configuration
+horizontal_scaling:
+  # Message Queue Configuration
+  message_queue:
+    type: "redis"  # redis, rabbitmq, memory
+    node_id: "auto"  # auto-generated if not specified
+    
+    # Redis configuration
+    redis:
+      host: "redis"
+      port: 6379
+      db: 0
+      password: ""
+      socket_timeout: 5
+      socket_connect_timeout: 5
+      retry_on_timeout: true
+    
+    # RabbitMQ configuration (alternative to Redis)
+    rabbitmq:
+      host: "rabbitmq"
+      port: 5672
+      username: "cctv_user"
+      password: "cctv_password"
+      virtual_host: "cctv"
+      heartbeat: 600
+      blocked_connection_timeout: 300
+    
+    # Message TTL settings (seconds)
+    request_ttl: 300    # 5 minutes
+    result_ttl: 600     # 10 minutes
+    event_ttl: 3600     # 1 hour
+    alert_ttl: 1800     # 30 minutes
+    health_ttl: 120     # 2 minutes
+  
+  # Load Balancer Configuration
+  load_balancer:
+    # API Server Load Balancer
+    api:
+      strategy: "least_response_time"  # round_robin, weighted_round_robin, least_connections, least_response_time, ip_hash, random, health_based
+      health_check_interval: 30
+      health_check_timeout: 5
+      health_check_path: "/health"
+      max_failures: 3
+      failure_timeout: 60
+      sticky_sessions: true
+      session_cookie_name: "cctv_session"
+      enable_metrics: true
+    
+    # Stream Processor Load Balancer
+    stream_processor:
+      strategy: "least_connections"
+      health_check_interval: 30
+      health_check_timeout: 10
+      health_check_path: "/health"
+      max_failures: 3
+      failure_timeout: 60
+      sticky_sessions: false
+      enable_metrics: true
+    
+    # Worker Load Balancer
+    worker:
+      strategy: "weighted_round_robin"
+      health_check_interval: 30
+      health_check_timeout: 5
+      health_check_path: "/health"
+      max_failures: 3
+      failure_timeout: 60
+      sticky_sessions: false
+      enable_metrics: true
+  
+  # Shared Storage Configuration
+  shared_storage:
+    storage_type: "local"  # local, s3, nfs, sftp
+    base_path: "/shared"
+    max_file_size: 104857600  # 100MB
+    enable_compression: false
+    enable_encryption: false
+    enable_versioning: false
+    retention_days: 30
+    backup_enabled: true
+    backup_interval_hours: 24
+    
+    # S3 Configuration (for cloud deployments)
+    s3_config:
+      bucket_name: "cctv-anomaly-storage"
+      region: "us-east-1"
+      access_key_id: ""
+      secret_access_key: ""
+      session_token: ""
+      endpoint_url: ""  # For MinIO or other S3-compatible services
+    
+    # NFS Configuration
+    nfs_config:
+      server: "nfs-server"
+      export_path: "/exports/cctv"
+      mount_options: "rw,sync,hard,intr"
+    
+    # SFTP Configuration
+    sftp_config:
+      host: "sftp-server"
+      port: 22
+      username: "cctv_user"
+      password: ""
+      private_key_path: ""
+      remote_path: "/home/cctv/shared"
+  
+  # Distributed Coordinator Configuration
+  coordinator:
+    node_role: "coordinator"  # coordinator, worker, api_server, stream_processor, storage_node
+    coordinator_host: "coordinator"
+    coordinator_port: 8000
+    heartbeat_interval: 30
+    node_timeout: 90
+    
+    # Auto-scaling Configuration
+    auto_scaling_enabled: true
+    min_nodes: 1
+    max_nodes: 10
+    scale_up_threshold: 0.8    # Scale up when average load > 80%
+    scale_down_threshold: 0.3  # Scale down when average load < 30%
+    
+    # Node Capabilities
+    capabilities:
+      - "processing"
+      - "feature_extraction"
+      - "inference"
+      - "stream_processing"
+
+# Environment-specific overrides
+# These settings will override the above based on the ENVIRONMENT variable
+environments:
+  development:
+    logging:
+      level: "DEBUG"
+    api:
+      debug: true
+    monitoring:
+      enable_metrics: false
+    security:
+      enable_authentication: false
+    horizontal_scaling:
+      message_queue:
+        type: "memory"
+      shared_storage:
+        storage_type: "local"
+      coordinator:
+        auto_scaling_enabled: false
+  
+  testing:
+    database:
+      name: "cctv_anomaly_test"
+    logging:
+      level: "WARNING"
+    alerts:
+      enabled: false
+    horizontal_scaling:
+      message_queue:
+        type: "memory"
+      shared_storage:
+        storage_type: "local"
+      coordinator:
+        auto_scaling_enabled: false
+  
+  production:
+    logging:
+      level: "INFO"
+    api:
+      debug: false
+    security:
+      enable_authentication: true
+      enable_https: true
+    monitoring:
+      enable_metrics: true
+    alerts:
+      enabled: true
+    horizontal_scaling:
+      message_queue:
+        type: "rabbitmq"
+      shared_storage:
+        storage_type: "s3"
+      coordinator:
+        auto_scaling_enabled: true
